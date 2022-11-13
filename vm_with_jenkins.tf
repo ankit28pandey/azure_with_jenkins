@@ -12,6 +12,7 @@ provider "azurerm" {
     subscription_id =  "19fd7810-9b54-4adc-919f-68afdb039efa"
     client_id = "8d24b432-6f8d-41a5-9e50-11f445555b19"
     client_secret = "_xr8Q~D-V68ZtazvkqjalOg_sP0kH32chML6rcfu"
+    features {}
 }
 
 resource "azurerm_resource_group" "example" {
@@ -26,7 +27,7 @@ resource "azurerm_virtual_network" "example" {
     resource_group_name = azurerm_resource_group.example.name
 }
 
-resource "azure_subnet" "example" {
+resource "azurerm_subnet" "example" {
     name = "terraform-subnet"
     address_space = "10.0.0.0/24"
     resource_group_name = azurerm_resource_group.example.name
@@ -36,18 +37,18 @@ resource "azure_subnet" "example" {
 resource "azurerm_network_interface" "example" {
     name = "terraform-ip"
     location = azurerm_resource_group.example.location
-    resource_group_name = azure_resource_group.example.name
+    resource_group_name = azurerm_resource_group.example.name
 
     ip_configuraton {
         name = "terraform-subnet"
-        subnet_id = azure_subnet.example.id
+        subnet_id = azurerm_subnet.example.id
     }
 }
 
 resource "azurerm_linux_virtual_machine" "example" {
     name = "terraform-vm"
     resource_group_name = azurerm_resource_group.example.name
-    location = azure_resource_group.example.location
+    location = azurerm_resource_group.example.location
     size = "Standard_F2"
     admin_username = "adminuser"
 
